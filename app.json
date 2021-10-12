@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "rentXignite",
+    "slug": "rentXignite",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "rentXignite"
+}
