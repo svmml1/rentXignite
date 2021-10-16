@@ -12,26 +12,37 @@ import {
     
 } from './styles';
 import { Car } from '../../components/Car';
+import { Load } from '../../components/Load';
+import { api } from '../../services/api';
+import { CarDTO } from '../../dtos/CarDTO';
 
 interface Props {
     
 }
 export function Home(){
+    const [cars, setCars] = useState<CarDTO[]>([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
-    const carData ={
-        brand: 'Audi',
-        name: 'R$ 5 Coupé',
-        rent: {
-            period: 'Ao Dia',
-            price: 120,
-        },
-        thumbmail: 'https://cdn.picpng.com/audi/audi-face-28582.png'
-        
-    }
 
     function handleCarDetails() {
         navigation.navigate('CarDetails')
     }
+
+    useEffect(() => {
+      async function fetchCars() {
+          
+        try {
+            const response = await api.get('/cars')
+            setCars(response.data)
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoading(false)
+        }
+        
+        }
+        fetchCars()
+    },[])
 
     return (
         <Container>
@@ -52,15 +63,17 @@ export function Home(){
                 </TotalCars>
                  </HeaderContent>
             </Header>
+            {loading ? <Load /> : 
             <CarList 
-            data={[1,2,3,4,5,6]}
-            keyExtractor={item => String(item)}
+            data={cars}
+            keyExtractor={item => item.id}
             renderItem={({item }) => 
-            <Car data={carData} 
+            <Car data={item} 
             onPress={handleCarDetails} 
             />
         }
-            />
+        />
+        }
 
             
         

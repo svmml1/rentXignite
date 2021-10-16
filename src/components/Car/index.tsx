@@ -23,7 +23,7 @@ interface CarData {
         period: string;
         price: number;
     }
-    thumbmail: string;
+    thumbnail: string;
 }
 
 interface Props extends RectButtonProps {
@@ -48,7 +48,7 @@ export function Car({data, ...rest}: Props) {
                 </About>
             </Details>
             <CarImage 
-            source={{ uri: data.thumbmail}}
+            source={{ uri: data.thumbnail }}
             resizeMode="contain"
             />
         </Container>
