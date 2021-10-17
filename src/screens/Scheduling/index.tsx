@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
 import ArrowSvg from '../../assets/arrow.svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import { format} from 'date-fns'
 import {
     Container,
     Content,
@@ -17,22 +17,67 @@ import {
     Title,
 } from './styles';
 import { Button } from '../../components/Button';
-import { Calendar } from '../../components/Calendar';
+import {
+    Calendar,
+    DayProps,
+    generateInterval,
+    MarkedDateProps,
+} from '../../components/Calendar';
+import { startClock } from 'react-native-reanimated';
+import { getPlatformDate } from '../../utils/getPlatformDate';
+import { CarDTO } from '../../dtos/CarDTO';
 
-interface Props { }
+interface RentalPeriod {
+    startFormatted: string;
+    endFormatted: string;
+  }
+
+  interface Params {
+    car: CarDTO;
+  }
 export function Scheduling() {
-    const navigation = useNavigation();
+    const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>({} as DayProps);
+    const [markedDates, setMarkedDates] = useState<MarkedDateProps>({} as MarkedDateProps);
+    const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod);
+
+    const navigation = useNavigation<any>();
     const theme = useTheme()
+    const route = useRoute();
+    const { car } = route.params as Params;
 
     function handleConfirmRental() {
-        navigation.navigate('SchedulingDetails')
+            navigation.navigate('SchedulingDetails',{
+                car,
+                dates: Object.keys(markedDates)
+            })
     }
 
-      function handleBack(){
-        navigation.goBack() 
+    function handleBack() {
+        navigation.goBack()
     }
 
-return (
+    function handleChangeDate(date: DayProps) {
+        let start = !lastSelectedDate.timestamp ? date : lastSelectedDate;
+        let end = date;
+
+        if (start.timestamp > end.timestamp) {
+            start = end;
+            end = start;
+        }
+        setLastSelectedDate(end);
+        const interval = generateInterval(start, end);
+        setMarkedDates(interval);
+
+        const firstDate = Object.keys(interval)[0];
+        const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
+
+        setRentalPeriod({
+            startFormatted: format(getPlatformDate(new Date(firstDate)), 'dd/MM/yyyy'),
+            endFormatted: format(getPlatformDate(new Date(endDate)), 'dd/MM/yyyy'),
+        })
+    }
+
+    return (
         <Container>
             <Header>
                 <StatusBar
@@ -53,24 +98,30 @@ return (
                 <RentalPeriod>
                     <DateInfo>
                         <DateTitle>DE</DateTitle>
-                        <DateValue />
+                        <DateValue selected={!!rentalPeriod.startFormatted}>
+                            {rentalPeriod.startFormatted}
+                        </DateValue>
                     </DateInfo>
                     <ArrowSvg />
 
                     <DateInfo>
                         <DateTitle>ATÉ</DateTitle>
-                        <DateValue >
-
+                        <DateValue selected={!!rentalPeriod.endFormatted} >
+                            {rentalPeriod.endFormatted}
                         </DateValue>
                     </DateInfo>
                 </RentalPeriod>
             </Header>
             <Content>
-                <Calendar />
+                <Calendar
+                    markedDates={markedDates}
+                    onDayPress={handleChangeDate}
+                />
                 <Footer>
-                    <Button 
-                    title="Confirmar"
-                    onPress={handleConfirmRental}
+                    <Button
+                        title="Confirmar"
+                        onPress={handleConfirmRental}
+                        enabled={!!rentalPeriod.startFormatted}
                     />
                 </Footer>
             </Content>
