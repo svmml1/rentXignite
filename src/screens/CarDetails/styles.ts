@@ -88,14 +88,3 @@ export const OfflineInfo = styled.Text`
   font-size: ${RFValue(10)}px;
   text-align: center;
 `;  
-
-export const Content = styled.ScrollView.attrs({
-  contentContainerStyle: {
-    padding: 24,
-    alignItens: 'center'
-  },
-  showsVerticalScrollIndicator: false
-
-})`
-
-`;
