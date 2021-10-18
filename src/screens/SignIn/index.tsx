@@ -20,6 +20,7 @@ import {
 import { Button } from '../../components/Button';
 import theme from '../../styles/theme';
 import { Input } from '../../components/Input';
+import { PasswordInput } from '../../components/PasswordInput';
 
 interface Props { }
 export function SignIn() {
@@ -29,12 +30,15 @@ export function SignIn() {
 
   const navigation = useNavigation();
     return (
+        <KeyboardAvoidingView behavior="position" enabled>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
         <Container>
             <StatusBar
                 barStyle="dark-content"
                 backgroundColor="transparent"
                 translucent
-            />
+                />
             <Header>
                 <Title>Estamos {'\n'} quase lá</Title>
                 <SubTitle>
@@ -54,6 +58,12 @@ export function SignIn() {
             onChangeText={setEmail}
             value={email}    
             />
+                   <PasswordInput 
+            iconName="lock"
+            placeholder="Senha"    
+            onChangeText={setPassword}              
+            value={password}
+            />
             </Form>
 
             <Footer>
@@ -62,7 +72,7 @@ export function SignIn() {
                     onPress={() => { }}
                     enabled={true}
                     loading={false}
-                />
+                    />
 
                 <Button
                     title="Criar conta gratuita"
@@ -71,8 +81,11 @@ export function SignIn() {
                     
                     enabled={true}
                     loading={false}
-                />
+                    />
+          
             </Footer>
         </Container>
+                    </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }
