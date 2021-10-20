@@ -19,7 +19,7 @@ export function StackRoutes(){
     <Navigator screenOptions={{
       headerShown: false
       }} 
-      initialRouteName="SignIn"> 
+      initialRouteName="Splash"> 
       <Screen 
       name="Splash"
       component={Splash}
