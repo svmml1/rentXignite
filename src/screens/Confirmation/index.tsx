@@ -21,17 +21,20 @@ interface Params {
   nextScreenRoute: string;
 }
 
-export function Confirmation(){
-  const navigation = useNavigation();
+export function Confirmation({
+  
+}:Params){
+  const navigation = useNavigation<any>();
   const { width } = useWindowDimensions();
+  const route = useRoute();
+  const { title, message, nextScreenRoute } = route.params as Params;
 
-
-function handleConfirm() {
- navigation.navigate('Home');
- }
+  function handleConfirm() {
+    navigation.navigate(nextScreenRoute);
+  }
 
   return (
-    <Container>
+<Container>
       <StatusBar 
         barStyle="light-content"
         translucent
@@ -42,20 +45,15 @@ function handleConfirm() {
 
       <Content>
         <DoneSvg width={80} height={80}/>
-        <Title>Carro Alugado!</Title>
+        <Title>{title}</Title>
 
         <Message>
-        Agora você só precisa ir{'\n'}
-        até a concessionária da RENTX{'\n'}
-        pegar o seu automóvel.
+          {message}
         </Message>
       </Content>
 
       <Footer>
-        <ConfirmButton 
-        title="Ok"
-        onPress={handleConfirm}
-        />
+        <ConfirmButton title="OK" onPress={handleConfirm} />
       </Footer>
     </Container>
   );

@@ -79,7 +79,13 @@ export function SchedulingDetails(){
         id: car.id,
         unavailable_dates
     })
-    .then(() => navigation.navigate('Confirmation'))
+    .then(() => { 
+        navigation.navigate('Confirmation', {
+        nextScreenRoute: 'Home',
+        title: 'Carro Alugado!',
+        message: `Agora só precisa ir\n buscar seu carro`
+    })
+})
     .catch(() => {
         setLoading(false)
         Alert.alert('Não foi possível confirmar agora.')})

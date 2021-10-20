@@ -22,13 +22,41 @@ import theme from '../../styles/theme';
 import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
 
+
 interface Props { }
 export function SignIn() {
 
+    const navigation = useNavigation();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
+  async  function handleSignIn() {
+    
+    try {
+         const schema = Yup.object().shape({
+            email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+            password: Yup.string()
+            .required('A senha é obrigatória')
+        })
+        await schema.validate({ email, password})
+        Alert.alert('Tudo certo!')
+    } catch (error) {
+        if(error instanceof Yup.ValidationError){
+            return Alert.alert('Opa', error.message)
+        }else {
+            Alert.alert('Erro na autenticação', 
+            'Ocorreu um erro ao fazer login, verifique as credenciais'
+            )
+        }
+
+    }
+}
+
+function handleNewAccount() {
+    navigation.navigate('SignUpFirstStep');
+  }
     return (
         <KeyboardAvoidingView behavior="position" enabled>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,7 +97,7 @@ export function SignIn() {
             <Footer>
                 <Button
                     title="Login"
-                    onPress={() => { }}
+                    onPress={handleSignIn}
                     enabled={true}
                     loading={false}
                     />
@@ -78,7 +106,7 @@ export function SignIn() {
                     title="Criar conta gratuita"
                     color={theme.colors.background_secondary}
                     light
-                    
+                    onPress={handleNewAccount}
                     enabled={true}
                     loading={false}
                     />
