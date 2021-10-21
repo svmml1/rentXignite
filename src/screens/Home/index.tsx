@@ -40,6 +40,9 @@ export function Home(){
     const navigation = useNavigation();
     const theme = useTheme();
 
+  
+
+ {  /*
     const positionY = useSharedValue(0)
     const positionX = useSharedValue(0)
 
@@ -50,9 +53,8 @@ export function Home(){
                 {translateY: positionY.value}
             ]
         }
-    })
-
-    const onGestureEvent = useAnimatedGestureHandler({
+    }) 
+     const onGestureEvent = useAnimatedGestureHandler({
         onStart(_, ctx: any){
             ctx.positionX = positionX.value
             ctx.positionY = positionY.value
@@ -66,7 +68,7 @@ export function Home(){
             positionX.value = withSpring(0)
             positionY.value = withSpring(0)
         }
-    })
+    }) */}
 
     function handleCarDetails(car: CarDTO) {
         navigation.navigate('CarDetails', {car})
@@ -78,26 +80,28 @@ export function Home(){
 
 
     useEffect(() => {
-      async function fetchCars() {
-          
+        let isMounted = true
+      async function fetchCars() {        
         try {
             const response = await api.get('/cars')
+            if(isMounted){
             setCars(response.data)
+            }
         } catch (error) {
             console.log(error)
         }finally{
+            if(isMounted){
             setLoading(false)
+            }
         }
         
         }
         fetchCars()
+        return () => {
+            isMounted= false
+        }
     },[])
 
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', () => {
-               return true             
-        })
-    },[])
     return (
         <Container>
             <StatusBar 
@@ -131,7 +135,7 @@ export function Home(){
         }
         />
         }
-            <PanGestureHandler
+           {/* <PanGestureHandler
             onGestureEvent={onGestureEvent}
             >
 
@@ -157,7 +161,7 @@ export function Home(){
                />
            </ButtonAnimated>
                </Animated.View>
-               </PanGestureHandler>
+        </PanGestureHandler> */}
         
         </Container>
     );

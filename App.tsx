@@ -16,6 +16,7 @@ import {
   Archivo_600SemiBold
 } from '@expo-google-fonts/archivo';
 import { Routes } from './src/routes';
+import { AuthProvider } from './src/hooks/auth';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -32,7 +33,9 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-     <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

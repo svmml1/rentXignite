@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import * as Yup from 'yup';
 
+import { database } from '../../database';
 import {
     Container,
     Header,
@@ -21,6 +22,7 @@ import { Button } from '../../components/Button';
 import theme from '../../styles/theme';
 import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
+import { useAuth } from '../../hooks/auth';
 
 
 interface Props { }
@@ -29,7 +31,7 @@ export function SignIn() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
-
+    const { signIn } = useAuth();
   async  function handleSignIn() {
     
     try {
@@ -42,6 +44,8 @@ export function SignIn() {
         })
         await schema.validate({ email, password})
         Alert.alert('Tudo certo!')
+
+        signIn({email, password});
     } catch (error) {
         if(error instanceof Yup.ValidationError){
             return Alert.alert('Opa', error.message)
@@ -57,6 +61,15 @@ export function SignIn() {
 function handleNewAccount() {
     navigation.navigate('SignUpFirstStep');
   }
+
+  useEffect(() => {
+      async function loadData() {
+          const userCollection = database.get('users');
+          const users = await userCollection.query().fetch();
+          console.log(users)
+      }
+      loadData()
+  }, [])
     return (
         <KeyboardAvoidingView behavior="position" enabled>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
