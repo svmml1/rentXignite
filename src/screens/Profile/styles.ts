@@ -24,7 +24,7 @@ export const HeaderTop = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: ${getStatusBarHeight() + 32}px;
+  margin-top: ${getStatusBarHeight() + 52}px;
 `;
 
 export const HeaderTitle = styled.Text`

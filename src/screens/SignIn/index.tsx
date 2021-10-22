@@ -43,7 +43,7 @@ export function SignIn() {
             .required('A senha é obrigatória')
         })
         await schema.validate({ email, password})
-        Alert.alert('Tudo certo!')
+        
 
         signIn({email, password});
     } catch (error) {
