@@ -24,7 +24,7 @@ export const HeaderTop = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: ${getStatusBarHeight() + 52}px;
+  margin-top: ${getStatusBarHeight() + 12}px;
 `;
 
 export const HeaderTitle = styled.Text`
@@ -40,7 +40,7 @@ export const PhotoContainer = styled.View`
   height: 180px;
   border-radius: 90px;
   background-color: ${({ theme }) => theme.colors.shape};
-  margin-top: 48px;
+  margin-top: 16px;
 `;
 
 export const Photo = styled.Image`
@@ -62,7 +62,7 @@ export const PhotoButton = styled(RectButton)`
 
 export const Content = styled.View`
   padding: 0 24px;
-  margin-top: 122px;
+  margin-top: 40px;
 `;
 
 export const Options = styled.View`

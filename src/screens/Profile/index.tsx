@@ -33,6 +33,7 @@ import {
 import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
 import { Button } from '../../components/Button';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 interface Props {}
 export function Profile(){  
@@ -43,6 +44,7 @@ export function Profile(){
     const [driverLicense, setDriverLicense] = useState(user.driver_license); 
     const theme = useTheme();
     const navigation = useNavigation();
+    const netInfo = useNetInfo();
 
     function handleBack() {
         navigation.goBack()
@@ -64,7 +66,11 @@ export function Profile(){
     }
 
     function handleOptionChange( optionSelected: 'dataEdit' | 'passwordEdit'){
-        setOption(optionSelected)
+        if(!netInfo.isConnected === true && optionSelected === 'passwordEdit'){
+            Alert.alert('Para mudar a senha , conencte-se a internet')
+        }else {
+            setOption(optionSelected)
+        }
     } 
 
     async function handleProfileUpdate() {

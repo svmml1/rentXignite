@@ -30,6 +30,7 @@ import React, {
     signIn: (credentials: SignInCredentials) => Promise<void>;
     signOut: () => Promise<void>;
     updatedUser: (user: User) => Promise<void>;
+    loading: boolean;
   }
   
   interface AuthProviderProps {
@@ -41,6 +42,7 @@ import React, {
 
   function AuthProvider({children}: AuthProviderProps){
     const [data, setData] = useState<User>({} as User)
+    const [loading, setLoading] = useState(true)
 
     async function signIn({email, password}: SignInCredentials) {
 
@@ -110,6 +112,7 @@ import React, {
           const userData = response[0]._raw as unknown as User;
           api.defaults.headers.authorization = `Bearer ${userData.token}`;
           setData(userData);
+          setLoading(false)
           }
           console.log('tô logado brow')
           console.log(response)
@@ -123,7 +126,8 @@ import React, {
         user: data,
         signIn,
         signOut,
-        updatedUser
+        updatedUser,
+        loading
       }}>
         {children}
       </AuthContext.Provider>
